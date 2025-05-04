@@ -2,7 +2,7 @@
 
 #Ersteller: Paul Kramer
 #Erstellungsdatum: 29.04.2025 
-#Letzte Änderung: 29.04.2025
+#Letzte Änderung: 04.05.2025
 
 #Funktion:
     #Scannen des I2C-Busses, Initialisieren des Helligkeitssensors und weiterleiten der Messdaten
@@ -15,6 +15,8 @@
         #SCL  = GPIO Pin 4
         #SDA  = GPIO Pin 5
 
+#Benutzte Bibliothek:
+    #bh1750:  https://github.com/flrrth/pico-bh1750
 #########Bibliotheken#########
 from machine import SoftI2C, Pin
 from bh1750 import BH1750
@@ -32,8 +34,7 @@ def init():
         print("Helligkeitsensor BH1750 nicht gefunden!")
     else:
         bh1750_sensor = BH1750(0x23, i2c)
-        print("Helligkeitsensor BH1750 Initialisiert.")         
-
+        print("Helligkeitsensor BH1750 Initialisiert.")
 
 #########Helligkeit Messen#########
 def lux():
@@ -42,7 +43,7 @@ def lux():
         return lux
     except:
         print("Helligkeitssensor BH1750, fehler beim Messen!")
-        return 0
-    
-#########Selbst Initialisierung#########
+        return -1            #Gibt einen Fehler an
+
+#########Selbst Initialiesierung#########
 init()

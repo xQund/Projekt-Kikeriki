@@ -1,9 +1,9 @@
 import machine
 import time
 
+#https://github.com/larsks/micropython-stepper-motor/blob/master/motor.py
 # Thanks to:
 # https://youtu.be/B86nqDRskVU
-
 
 class Stepper:
     stepms = 10
