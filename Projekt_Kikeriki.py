@@ -5,7 +5,10 @@
 #Letzte Änderung: 04.05.2025
 
 #Funktion:
-    #Steuern einer Hühnerklappe und Zählen der Hühner
+    #Steuern einer Hühnerklappe und Zählen der Hühner ein und ausgehenden Hühner.
+    #Es ist eine Weboberfläche für bessere Bedienung und ansehen der Daten vorhanden.
+    #Die Klappe kann sowohl im Automatikbetrieb als auch im Handbetrieb bedient werden.
+    #Auf der Weboberfläche können die Bedingungen für den Automatikbetrieb angepasst werden.
 
 #Hardware Komponenten
     #Microcontroller: ESP32-S3-WROOM-1
@@ -90,24 +93,30 @@ draussen = []					#Liste mit allen RFID-Nummern der sich draußen befindenden H�
 drinnen = []					#Liste mit allen RFID-Nummern der sich drinnen befindenden Hühnern
 registrierte_rfids = []			#Liste aller registrierten RFID-Karten
 anzahl_draussen = None			#Anzahl der sich draussen befindenden Hühnern
-anzahl_drinnen = None			#Anzahl der sich drinnen befindenden Hühnern
-wlan_fehler = None				#WLAN-Verbindung   None= Erfolgreich  |  String= Gescheitert                                      
-hell_zeit = time.ticks_ms()		
-dunkel_zeit = time.ticks_ms()	
+anzahl_drinnen = None			#Anzahl der sich drinnen befindenden Hühnern                             
+hell_zeit = time.ticks_ms()		#Referenzzeit, wird verwendet um herrauszufinden wie lange die lux_grenze schon überschritten ist
+dunkel_zeit = time.ticks_ms()	#Referenzzeit, wird verwendet um herrauszufinden wie lange die lux_grenze schon unterschritten ist
 klappe = False					#False = Klappe fährt zu  |  True = Klappe fährt auf
 klappenposition = 0				#Hält fest wie weit die Klappe geöffnet ist    0=geschlossen | 18=geöffnet
 grad = 0						#Die vom Steppermotor anzufahrende Position in Grad
 klappenbetrieb = "Auto"			#Klappe im Auto- oder Handbetrieb
 uhrzeit = False					#True = Die aktuell Uhrzeit ist innerhalb der Uhrzeit, in der die Klappe geöffnet sein soll
-json_daten = None
-json_status = None
+json_daten = None				#Analgendaten die zum Broker gepublished werden.
+json_status = None				#Anlagenstatus der gepublished wird. True = Anlage in Betrieb   False = Anlage außer Betrieb
+lux_zeit = None
+
+#WLAN
+ssid = "BZTG-IoT"
+passwort = "WerderBremen24"
+wlan_fehler = None				#WLAN-Verbindung   None= Erfolgreich  |  String= Gescheitert
 
 #Alle von Node-Red kommenden Einstellungen
 einstellung_node_red = {
     "lux_grenze": 200,			#Umschaltgrenze in Lux; Unter dem Wert = Klappe Schließt; Über dem Wert = Klappe Öffnet
+    "lux_zeit": 300,			#Wird die lux_grenze für die angegeben Zeit überschritten, fährt die Klappe. Angabe ist in Sekunden
     "fahre_nach": "lux",		#Die Klappe wird nach "lux" oder "uhrzeit" gefahren
-    "huehner_anzahl": 7,			#Anzahl der gesamten Hühner
-    "auf_huehner_warten": True,	#True = Vor dem Schließen der Klappe, wird gewartet bis alle Hühner im Stall sind
+    "huehner_anzahl": 7,		#Anzahl der gesamten Hühner
+    "auf_huehner_warten": True	#True = Vor dem Schließen der Klappe, wird gewartet bis alle Hühner im Stall sind
     }
 #---------------------------------------------------------------------------------------------------------------
 ####################RFID-Leser Initialisieren####################
@@ -120,7 +129,7 @@ stepper = uln2003_stepper.FullStepMotor.frompins(15, 16, 17, 18)
 
 #---------------------------------------------------------------------------------------------------------------
 ####################WLAN Initialisieren####################
-wlan_fehler = WLAN.STA("heim")
+wlan_fehler = WLAN.STA(ssid, passwort)
 
 #---------------------------------------------------------------------------------------------------------------
 ####################JSON Status####################
@@ -177,10 +186,11 @@ def klappe_auto():
         elif lux < einstellung_node_red["lux_grenze"]:
             dunkel_zeit = time.ticks_ms()
         
-        #Klappe fährt erst nach 5 Sekunden über/unter der eingestellten Lux-Grenze auf/zu
-        if time.ticks_diff(hell_zeit, dunkel_zeit) > 5000:
+        #Klappe fährt erst nach der eingestellten Zeit in Sekunden über/unter der eingestellten Lux-Grenze auf/zu
+        lux_zeit = einstellung_node_red["lux_zeit"] * 1000      #Zeit die in Sekunden angegeben ist, wird in Milisekunden abgeändert
+        if time.ticks_diff(hell_zeit, dunkel_zeit) > lux_zeit:
             klappe = True
-        elif time.ticks_diff(dunkel_zeit, hell_zeit) > 5000 and alle_hühner_drinnen:
+        elif time.ticks_diff(dunkel_zeit, hell_zeit) > lux_zeit and alle_hühner_drinnen:
             klappe = False
     
     #Klappe wird nach Uhrzeit gefahren (Die Auswertung der Uhrzeit geschieht in Node-Red)
@@ -199,7 +209,7 @@ def klappe_auto():
 mqtt_client = umqtt.simple.MQTTClient("Kikeriki_ESP32", "192.168.178.47", 1883)
 mqtt_client.set_callback(sub_Node_Red_Daten)
 json_format_status(False)
-mqtt_client.set_last_will("Kikeriki/ESP32/Status", json_status)  #Bei Verbindungsverlust oder Anlagenausfall wird das auf Node-Red angezeigt 
+mqtt_client.set_last_will("Kikeriki/ESP32/Status", json_status, retain=False, qos=2)  #Bei Verbindungsverlust oder Anlagenausfall wird das auf Node-Red angezeigt 
 try:
     mqtt_client.connect()
     time.sleep(1)
@@ -207,7 +217,7 @@ try:
     mqtt_client.subscribe("Kikeriki/Node_Red/Klappenbetrieb")
     mqtt_client.subscribe("Kikeriki/Node_Red/Uhrzeit")
     json_format_status(True)
-    mqtt_client.publish("Kikeriki/ESP32/Status", json_status) #Erfolgreicher Verbindungsaufbau zu MQTT wird auf Node-Red angezeigt      
+    mqtt_client.publish("Kikeriki/ESP32/Status", json_status, qos=1) #Erfolgreicher Verbindungsaufbau zu MQTT wird auf Node-Red angezeigt      
     print("MQTT ist Verbunden!")
 except:
     print("Verbindungsaufbau zu MQTT Fehlgeschlagen!")

@@ -18,19 +18,14 @@ import time
 wlan = network.WLAN(network.STA_IF)
 
 #########WLAN statische Verbindung#########
-def STA(ssid="BZTG-IoT", passwort="WerderBremen24"):
+def STA(ssid, passwort):
     aktuelle_zeit = 0
     wlan.active(False)
-    time.sleep(1)                        #Sichergehen, dass das WLAN vollständig deaktiviert ist
+    time.sleep(1)               #Sichergehen, dass das WLAN vollständig deaktiviert ist
     wlan.active(True)
-    wlan.config(txpower=8.5)              #WiFi-Sende DB erhöht, da bei standard Einstellungen
-                                         #keine konstante Verbindung aufgebaut werden kann
+    wlan.config(txpower=8.5)    #WiFi-Sende DB erhöht, da bei standard Einstellungen
+                                #keine konstante Verbindung aufgebaut werden kann
     
-    #Für schnelle Einrichtung im Heimnetzwerk
-    if ssid == "heim":
-        ssid = "FRITZ!Box 5530 CJ"
-        passwort = "50001817043201930028"
-        
     #Verbindungsaufbau
     wlan.connect(ssid, passwort)
     start_zeit = time.ticks_ms()         #Referenz Zeit für die Verbindungswartezeit
