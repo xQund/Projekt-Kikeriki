@@ -1,8 +1,8 @@
-#Projekt_Kikeriki
+#projekt_kikeriki
 
 #Ersteller: Paul Kramer
 #Erstellungsdatum: 11.03.2025   
-#Letzte Änderung: 04.05.2025
+#Letzte Änderung: 05.05.2025
 
 #Funktion:
     #Steuern einer Hühnerklappe und Zählen der Hühner ein und ausgehenden Hühner.
@@ -71,7 +71,7 @@
     #st7789:          https://github.com/russhughes/st7789_mpy
     #vga1_16x32:      https://github.com/russhughes/st7789_mpy/blob/master/fonts/bitmap/vga1_16x32.py
     #vga1_8x8:        https://github.com/russhughes/st7789_mpy/blob/master/fonts/bitmap/vga1_8x8.py
-    #RDM6300_RFID:    https://github.com/membermatters/urdm6300/blob/main/urdm6300/__init__.py
+    #rdm6300_rfid:    https://github.com/membermatters/urdm6300/blob/main/urdm6300/__init__.py
 
 #---------------------------------------------------------------------------------------------------------------
 ####################Bibliotheken####################
@@ -79,10 +79,10 @@ import time
 from machine import Pin
 import umqtt.simple
 import ujson
-import WLAN
-import BH1750_Helligkeitssensor as helligkeitssensor
-from RDM6300_RFID import Rdm6300
-import ST7789_Display as Display
+import wlan
+import bh1750_helligkeitssensor as helligkeitssensor
+from rdm6300_rfid import Rdm6300
+import st7789_display as display
 import uln2003_stepper
 
 #---------------------------------------------------------------------------------------------------------------
@@ -103,11 +103,11 @@ klappenbetrieb = "Auto"			#Klappe im Auto- oder Handbetrieb
 uhrzeit = False					#True = Die aktuell Uhrzeit ist innerhalb der Uhrzeit, in der die Klappe geöffnet sein soll
 json_daten = None				#Analgendaten die zum Broker gepublished werden.
 json_status = None				#Anlagenstatus der gepublished wird. True = Anlage in Betrieb   False = Anlage außer Betrieb
-lux_zeit = None
+lux_zeit = None					#Gespeicherte Helligkeitszeit in ms. Sobald die Helligkeit die eingestellte Helligkeitsgrenze für die Dauer dieser Zeit über- oder unterschreitet, fährt die Klappe im Automatikbetrieb 
 
 #WLAN
-ssid = "BZTG-IoT"
-passwort = "WerderBremen24"
+ssid = "BZTG-IoT"				#WLAN-SSID
+passwort = "WerderBremen24"		#WLAN-Passwort
 wlan_fehler = None				#WLAN-Verbindung   None= Erfolgreich  |  String= Gescheitert
 
 #Alle von Node-Red kommenden Einstellungen
@@ -129,7 +129,7 @@ stepper = uln2003_stepper.FullStepMotor.frompins(15, 16, 17, 18)
 
 #---------------------------------------------------------------------------------------------------------------
 ####################WLAN Initialisieren####################
-wlan_fehler = WLAN.STA(ssid, passwort)
+wlan_fehler = wlan.sta(ssid, passwort)
 
 #---------------------------------------------------------------------------------------------------------------
 ####################JSON Status####################
@@ -154,7 +154,7 @@ def json_format_daten():
     
 #---------------------------------------------------------------------------------------------------------------
 ####################Daten von Node-Red verarbeiten####################
-def sub_Node_Red_Daten(topic, msg):
+def sub_node_red_daten(topic, msg):
     global einstellung_node_red, klappenbetrieb, uhrzeit
     daten = ujson.loads(msg)
     topic = topic.decode('utf-8')
@@ -207,7 +207,7 @@ def klappe_auto():
 #---------------------------------------------------------------------------------------------------------------
 ####################MQTT####################
 mqtt_client = umqtt.simple.MQTTClient("Kikeriki_ESP32", "192.168.178.47", 1883)
-mqtt_client.set_callback(sub_Node_Red_Daten)
+mqtt_client.set_callback(sub_node_red_daten)
 json_format_status(False)
 mqtt_client.set_last_will("Kikeriki/ESP32/Status", json_status, retain=False, qos=2)  #Bei Verbindungsverlust oder Anlagenausfall wird das auf Node-Red angezeigt 
 try:
@@ -275,7 +275,7 @@ while True:
     if anzahl_draussen != len(draussen) or len(draussen) + len(drinnen) != einstellung_node_red["huehner_anzahl"] or wlan_fehler != None:
         anzahl_draussen = len(draussen)
         anzahl_drinnen =  einstellung_node_red["huehner_anzahl"] - anzahl_draussen
-        Display.text(anzahl_draussen, anzahl_drinnen, wlan_fehler)
+        display.text(anzahl_draussen, anzahl_drinnen, wlan_fehler)
         
     ####Klappe fahren####
     #Überprüfung ob die Klappe im Auto- oder Handbetrieb steht

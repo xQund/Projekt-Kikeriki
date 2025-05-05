@@ -1,8 +1,8 @@
-#B1750_Helligkeitssensor
+#bh1750_helligkeitssensor
 
 #Ersteller: Paul Kramer
 #Erstellungsdatum: 29.04.2025 
-#Letzte Änderung: 04.05.2025
+#Letzte Änderung: 05.05.2025
 
 #Funktion:
     #Scannen des I2C-Busses, Initialisieren des Helligkeitssensors und weiterleiten der Messdaten

@@ -1,8 +1,8 @@
-#ST7789_Display
+#st7789_display
 
 #Ersteller: Paul Kramer
 #Erstellungsdatum: 29.04.2025   
-#Letzte Änderung: 04.05.2025
+#Letzte Änderung: 05.05.2025
 
 #Funktion:
     #Initialisierung des Displays und Anzeigen von den sich drinnen und draussen befindlichen Hühnern

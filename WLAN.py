@@ -1,8 +1,8 @@
-#WLAN
+#wlan
 
 #Ersteller: Paul Kramer
 #Erstellungsdatum: 27.01.2025   
-#Letzte Änderung: 04.05.2025
+#Letzte Änderung: 05.05.2025
 
 #Funktion:
     #Verbinden mit einem WLAN-Netz und zurückgeben des Verbindungsstatus
@@ -18,7 +18,7 @@ import time
 wlan = network.WLAN(network.STA_IF)
 
 #########WLAN statische Verbindung#########
-def STA(ssid, passwort):
+def sta(ssid, passwort):
     aktuelle_zeit = 0
     wlan.active(False)
     time.sleep(1)               #Sichergehen, dass das WLAN vollständig deaktiviert ist
