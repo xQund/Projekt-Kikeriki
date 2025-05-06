@@ -1,0 +1,1932 @@
+[
+    {
+        "id": "1985e9f4feeee927",
+        "type": "tab",
+        "label": "MQTT Subscriben und Anlagendaten weiterverarbeiten",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "2011dba9e8ea1d2b",
+        "type": "mqtt in",
+        "z": "1985e9f4feeee927",
+        "name": "",
+        "topic": "Kikeriki/ESP32/Daten",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "985a99e5bd2c81ae",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 220,
+        "y": 140,
+        "wires": [
+            [
+                "634dfe02e4cb3ee7",
+                "c0b983a14a83122f",
+                "fc4dcea145a25245",
+                "3963ae49e256a1d2",
+                "992ecc7c78da41fd"
+            ]
+        ]
+    },
+    {
+        "id": "634dfe02e4cb3ee7",
+        "type": "function",
+        "z": "1985e9f4feeee927",
+        "name": "Helligkeit",
+        "func": "//Die Helligkeitsensordaten aufbereiten\nlet helligkeit = msg.payload[\"Helligkeit\"];\nmsg.payload = helligkeit;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 140,
+        "wires": [
+            [
+                "1a5ce01a6fdce384"
+            ]
+        ]
+    },
+    {
+        "id": "c0b983a14a83122f",
+        "type": "function",
+        "z": "1985e9f4feeee927",
+        "name": "Draussen",
+        "func": "//Die Daten der sich außerhalb des Stalls befindenden Hühner aufbereiten\nlet draussen = msg.payload[\"Draussen\"];\nmsg.payload = draussen;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 180,
+        "wires": [
+            [
+                "c1449c440e857e53"
+            ]
+        ]
+    },
+    {
+        "id": "fc4dcea145a25245",
+        "type": "function",
+        "z": "1985e9f4feeee927",
+        "name": "Drinnen",
+        "func": "//Die Daten der sich im Stall befindenden Hühner aufbereiten\nlet drinnen = msg.payload[\"Drinnen\"];\nmsg.payload = drinnen;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 220,
+        "wires": [
+            [
+                "9d6c873532efd268"
+            ]
+        ]
+    },
+    {
+        "id": "3963ae49e256a1d2",
+        "type": "function",
+        "z": "1985e9f4feeee927",
+        "name": "Klappenstatus",
+        "func": "//Die Daten des Klappenstatus aufbereiten\nlet klappenstatus = msg.payload[\"Klappenstatus\"];\nmsg.payload = klappenstatus;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 260,
+        "wires": [
+            [
+                "936c300df5208d5c"
+            ]
+        ]
+    },
+    {
+        "id": "c1449c440e857e53",
+        "type": "ui_text",
+        "z": "1985e9f4feeee927",
+        "group": "76ba114ce7b7c74f",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Anzahl der Hühner Draussen:",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 830,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "9d6c873532efd268",
+        "type": "ui_text",
+        "z": "1985e9f4feeee927",
+        "group": "76ba114ce7b7c74f",
+        "order": 4,
+        "width": 6,
+        "height": 1,
+        "name": "",
+        "label": "Anzahl der Hühner Drinnen:",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 820,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "936c300df5208d5c",
+        "type": "ui_text",
+        "z": "1985e9f4feeee927",
+        "group": "76ba114ce7b7c74f",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Klappenstatus:",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 780,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "1a5ce01a6fdce384",
+        "type": "ui_chart",
+        "z": "1985e9f4feeee927",
+        "name": "",
+        "group": "76ba114ce7b7c74f",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "label": "Lux",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "604800",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 750,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e684c850c3747201",
+        "type": "mysql",
+        "z": "1985e9f4feeee927",
+        "mydb": "f318ec90e48bb5f8",
+        "name": "Anlagendaten",
+        "x": 720,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "992ecc7c78da41fd",
+        "type": "function",
+        "z": "1985e9f4feeee927",
+        "name": "In Datenbank schreiben",
+        "func": "//Die Anlagendaten vom ESP32 in die Datenbank schreiben\nlet helligkeit = msg.payload[\"Helligkeit\"];\nlet draussen = msg.payload[\"Draussen\"];\nlet drinnen = msg.payload[\"Drinnen\"];\nlet klappenstatus = msg.payload[\"Klappenstatus\"];\n\n//Timestamp in einem Format, das SQLite verarbeiten kann (YYYY-MM-DD HH:MM:SS) \nconst zeit = new Date;\nzeit.setHours(zeit.getHours() + 2) //Zeitanpassung\nlet timestamp = zeit.toISOString().replace(\"T\", \" \").substring(0, 19);\n\nmsg.topic = \"INSERT INTO anlagendaten (Zeit, Helligkeit, Anzahl_Draussen, Anzahl_Drinnen, Klappenstatus) VALUES (?, ?, ?, ?, ?)\";\nmsg.payload = [timestamp, helligkeit, draussen, drinnen, klappenstatus];\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 300,
+        "wires": [
+            [
+                "e684c850c3747201"
+            ]
+        ]
+    },
+    {
+        "id": "106a860f11d05f65",
+        "type": "mqtt in",
+        "z": "1985e9f4feeee927",
+        "name": "",
+        "topic": "Kikeriki/ESP32/Status",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "985a99e5bd2c81ae",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 220,
+        "y": 400,
+        "wires": [
+            [
+                "3b39ea0a7176342d",
+                "f8f40581928df29c"
+            ]
+        ]
+    },
+    {
+        "id": "3b39ea0a7176342d",
+        "type": "function",
+        "z": "1985e9f4feeee927",
+        "name": "Verbindungsstatus",
+        "func": "//Den Verbindungsstatus des ESP32 mit dem Broker auswerten\n//Status true = ESP32 ist Verbunden      \n//Status false = ESP32 ist nicht Verbunden\nlet klappenstatus = msg.payload[\"Status\"];\nlet statustext;\n\nif (klappenstatus == true) {\n    statustext = \"Verbunden\";\n} else {\n    statustext = \"Verbindung getrennt\";\n};\n\nmsg.payload = statustext;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 400,
+        "wires": [
+            [
+                "25d7852c1b605b6f"
+            ]
+        ]
+    },
+    {
+        "id": "25d7852c1b605b6f",
+        "type": "ui_text",
+        "z": "1985e9f4feeee927",
+        "group": "76ba114ce7b7c74f",
+        "order": 1,
+        "width": 6,
+        "height": 1,
+        "name": "Verbindungsstatus Text",
+        "label": "Verbindung:",
+        "format": "{{payload}}",
+        "layout": "row-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 810,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "f8f40581928df29c",
+        "type": "link out",
+        "z": "1985e9f4feeee927",
+        "name": "link out 3",
+        "mode": "link",
+        "links": [
+            "e6a084ec13bf9bfe",
+            "239059ac38081234",
+            "dac1d9b8760b5a52",
+            "cb8b0c0ebe90bf41",
+            "c6893ac4baf54fe1",
+            "19558c93d65292aa"
+        ],
+        "x": 415,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "2002bba4e7f6ba04",
+        "type": "comment",
+        "z": "1985e9f4feeee927",
+        "name": "Subscriben der Anlagendaten",
+        "info": "",
+        "x": 240,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "6b09d7ddb0140f4d",
+        "type": "comment",
+        "z": "1985e9f4feeee927",
+        "name": "Dashboard",
+        "info": "",
+        "x": 760,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "13f98f7c8c4647a9",
+        "type": "comment",
+        "z": "1985e9f4feeee927",
+        "name": "Subscriben des Verbindungsstatus",
+        "info": "",
+        "x": 260,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "e47ff9f06e06f42a",
+        "type": "comment",
+        "z": "1985e9f4feeee927",
+        "name": "Alle Anlagendaten in die Datenbank schreiben",
+        "info": "",
+        "x": 990,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "dd6c686cd82e88ec",
+        "type": "comment",
+        "z": "1985e9f4feeee927",
+        "name": "Anzeige des Luxwertes als Graphen mit den letzten 7 Tagen",
+        "info": "",
+        "x": 1060,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "dffc164bb47a7f14",
+        "type": "comment",
+        "z": "1985e9f4feeee927",
+        "name": "Anzeige der Hühner Draussen als Integer",
+        "info": "",
+        "x": 1140,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "5eadd7e559f4073a",
+        "type": "comment",
+        "z": "1985e9f4feeee927",
+        "name": "Anzeige der Hühner Drinnen als Integer",
+        "info": "",
+        "x": 1110,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "f74edef091bf8bc4",
+        "type": "comment",
+        "z": "1985e9f4feeee927",
+        "name": "Anzeige des Klappenstatus als String",
+        "info": "",
+        "x": 1030,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "db9c23b87e353e27",
+        "type": "comment",
+        "z": "1985e9f4feeee927",
+        "name": "Publishen aller Daten von Node-Red beim Verbinden",
+        "info": "",
+        "x": 590,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "182ee4dbc9d9a73e",
+        "type": "comment",
+        "z": "1985e9f4feeee927",
+        "name": "Publishen aller Daten von Node-Red",
+        "info": "",
+        "x": 1080,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "8e4ae4559f042f85",
+        "type": "tab",
+        "label": "MQTT Publish und Dashboard-Daten verarbeiten",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "bcb47cf5e0332508",
+        "type": "ui_ui_control",
+        "z": "8e4ae4559f042f85",
+        "name": "",
+        "events": "all",
+        "x": 540,
+        "y": 140,
+        "wires": [
+            []
+        ],
+        "info": "{\"group\": {\"hide\": [\"Kikeriki/Node-Red/Handsteuerung\"]}}"
+    },
+    {
+        "id": "47afeaec3da9fd15",
+        "type": "ui_numeric",
+        "z": "8e4ae4559f042f85",
+        "name": "Helligkeitsgrenze in Lux",
+        "label": "Helligkeitsgrenze",
+        "tooltip": "",
+        "group": "cb180f9cdf865a0a",
+        "order": 8,
+        "width": 7,
+        "height": 1,
+        "wrap": true,
+        "passthru": true,
+        "topic": "topic",
+        "topicType": "msg",
+        "format": "{{value}}",
+        "min": "0",
+        "max": "10000",
+        "step": "10",
+        "className": "",
+        "x": 310,
+        "y": 660,
+        "wires": [
+            [
+                "3656571da5b0691b"
+            ]
+        ]
+    },
+    {
+        "id": "14170faa10d3c8b6",
+        "type": "mqtt out",
+        "z": "8e4ae4559f042f85",
+        "name": "",
+        "topic": "Kikeriki/Node_Red/Einstellungen",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "985a99e5bd2c81ae",
+        "x": 920,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "3656571da5b0691b",
+        "type": "function",
+        "z": "8e4ae4559f042f85",
+        "name": "lux_grenze",
+        "func": "//Die Lux grenze als globale Variable für die Weiterverwendung setzen\nflow.set(\"lux_grenze\", msg.payload);\nreturn msg;\n          \n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "30371fb1a0e6d349",
+        "type": "function",
+        "z": "8e4ae4559f042f85",
+        "name": "JSON-Format ",
+        "func": "//Alle Daten im Reiter \"Einstellungen\" in ein JSON-Format bringen und über MQTT Publishen\nlet luxGrenze = flow.get(\"lux_grenze\");\nlet luxZeit = flow.get(\"lux_zeit\");\nlet aufHuehnerWarten = flow.get(\"auf_hühner_warten\");\nlet fahrenNach = flow.get(\"fahren_nach\");\nlet huehnerAnzahl = flow.get(\"hühner_anzahl\");\n\nreturn {\n    payload:{\n        \"lux_grenze\": luxGrenze,\n        \"lux_zeit\": luxZeit,\n        \"auf_huehner_warten\": aufHuehnerWarten,\n        \"fahre_nach\": fahrenNach,\n        \"huehner_anzahl\": huehnerAnzahl\n    }\n};\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 880,
+        "wires": [
+            [
+                "14170faa10d3c8b6",
+                "5b2b0eb5356efcd8",
+                "5dd9c0fb37ae270c",
+                "c9df459afd0d340a",
+                "7b624d9b3e91ea55",
+                "b8b1f4551ad5bf8b",
+                "50e7c7da749d3d8b"
+            ]
+        ]
+    },
+    {
+        "id": "2aec8f65d192bde7",
+        "type": "ui_numeric",
+        "z": "8e4ae4559f042f85",
+        "name": "Sunrise Stunde",
+        "label": "Sonnenaufgang",
+        "tooltip": "",
+        "group": "cb180f9cdf865a0a",
+        "order": 12,
+        "width": 5,
+        "height": 1,
+        "wrap": false,
+        "passthru": true,
+        "topic": "srise",
+        "topicType": "msg",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "11",
+        "step": 1,
+        "className": "",
+        "x": 280,
+        "y": 420,
+        "wires": [
+            [
+                "367571db2f44db3c"
+            ]
+        ]
+    },
+    {
+        "id": "af54057da3d17385",
+        "type": "ui_numeric",
+        "z": "8e4ae4559f042f85",
+        "name": "Sunrise Minute",
+        "label": "",
+        "tooltip": "",
+        "group": "cb180f9cdf865a0a",
+        "order": 13,
+        "width": 2,
+        "height": 1,
+        "wrap": true,
+        "passthru": true,
+        "topic": "topic",
+        "topicType": "msg",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "55",
+        "step": "5",
+        "className": "",
+        "x": 280,
+        "y": 460,
+        "wires": [
+            [
+                "8bbfd96ea98a8626"
+            ]
+        ]
+    },
+    {
+        "id": "501de56ea9b95d1b",
+        "type": "ui_numeric",
+        "z": "8e4ae4559f042f85",
+        "name": "Sunset Stunde",
+        "label": "Sonnenuntergang",
+        "tooltip": "",
+        "group": "cb180f9cdf865a0a",
+        "order": 15,
+        "width": 5,
+        "height": 1,
+        "wrap": false,
+        "passthru": true,
+        "topic": "topic",
+        "topicType": "msg",
+        "format": "{{value}}",
+        "min": "12",
+        "max": "23",
+        "step": 1,
+        "className": "",
+        "x": 280,
+        "y": 500,
+        "wires": [
+            [
+                "e758207aa08209a4"
+            ]
+        ]
+    },
+    {
+        "id": "aff2596ae7855862",
+        "type": "ui_numeric",
+        "z": "8e4ae4559f042f85",
+        "name": "Sunset Minute",
+        "label": "",
+        "tooltip": "",
+        "group": "cb180f9cdf865a0a",
+        "order": 16,
+        "width": 2,
+        "height": 1,
+        "wrap": true,
+        "passthru": true,
+        "topic": "topic",
+        "topicType": "msg",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "55",
+        "step": "5",
+        "className": "",
+        "x": 280,
+        "y": 540,
+        "wires": [
+            [
+                "d2321aeb592a7be2"
+            ]
+        ]
+    },
+    {
+        "id": "367571db2f44db3c",
+        "type": "function",
+        "z": "8e4ae4559f042f85",
+        "name": "srise_hour",
+        "func": "//Die Sonnenaufgang (srise) Stunde als globale Variable für die Weiterverwendung setzen\nflow.set(\"srise_hour\", msg.payload);\nreturn msg;\n          \n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8bbfd96ea98a8626",
+        "type": "function",
+        "z": "8e4ae4559f042f85",
+        "name": "srise_minute",
+        "func": "//Die Sonnenaufgang (srise) Minuten als globale Variable für die Weiterverwendung setzen\nflow.set(\"srise_minute\", msg.payload);\nreturn msg;\n          \n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e758207aa08209a4",
+        "type": "function",
+        "z": "8e4ae4559f042f85",
+        "name": "sset_hour",
+        "func": "//Die Sonnenuntergang (sset) Stunde als globale Variable für die Weiterverwendung setzen\nflow.set(\"sset_hour\", msg.payload);\nreturn msg;\n          \n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d2321aeb592a7be2",
+        "type": "function",
+        "z": "8e4ae4559f042f85",
+        "name": "sset_minute",
+        "func": "//Die Sonnenuntergang (sset) Minuten als globale Variable für die Weiterverwendung setzen\nflow.set(\"sset_minute\", msg.payload);\nreturn msg;\n          \n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "181d94e7be14e9d2",
+        "type": "ui_button",
+        "z": "8e4ae4559f042f85",
+        "name": "",
+        "group": "cb180f9cdf865a0a",
+        "order": 20,
+        "width": 9,
+        "height": 1,
+        "passthru": false,
+        "label": "Änderungen Speichern",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "Speichern erfolgreich",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 300,
+        "y": 880,
+        "wires": [
+            [
+                "30371fb1a0e6d349",
+                "5e04625d0b372bbb",
+                "d15601149231a7d8",
+                "71d30f2c04864b02"
+            ]
+        ]
+    },
+    {
+        "id": "5b2b0eb5356efcd8",
+        "type": "ui_text",
+        "z": "8e4ae4559f042f85",
+        "group": "cb180f9cdf865a0a",
+        "order": 9,
+        "width": 2,
+        "height": 1,
+        "name": "Gespeicherte Lux grenze",
+        "label": "",
+        "format": "{{payload.lux_grenze}}Lux",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 890,
+        "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "5e04625d0b372bbb",
+        "type": "ui_toast",
+        "z": "8e4ae4559f042f85",
+        "position": "top right",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "Speichern erfolgreich",
+        "topic": "",
+        "name": "Speichern erfolgreich",
+        "x": 580,
+        "y": 1260,
+        "wires": []
+    },
+    {
+        "id": "17540d442b10eb2e",
+        "type": "ui_text",
+        "z": "8e4ae4559f042f85",
+        "group": "cb180f9cdf865a0a",
+        "order": 14,
+        "width": 2,
+        "height": 1,
+        "name": "Gespeicherter Sonnenaufgangswert",
+        "label": "",
+        "format": "{{payload.srise}}Uhr",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 930,
+        "y": 1160,
+        "wires": []
+    },
+    {
+        "id": "941f837e105be2c9",
+        "type": "ui_text",
+        "z": "8e4ae4559f042f85",
+        "group": "cb180f9cdf865a0a",
+        "order": 17,
+        "width": 2,
+        "height": 1,
+        "name": "Gespeicherter Sonnenuntergangswert",
+        "label": "",
+        "format": "{{payload.sset}}Uhr",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 930,
+        "y": 1200,
+        "wires": []
+    },
+    {
+        "id": "b63324e91ffc49fa",
+        "type": "ui_button",
+        "z": "8e4ae4559f042f85",
+        "name": "",
+        "group": "76ba114ce7b7c74f",
+        "order": 9,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Einstellungen",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{\"group\":{\"hide\":[\"Kikeriki_Anlagendaten\"], \"show\":[\"Kikeriki_Einstellungen\"]}}",
+        "payloadType": "json",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 280,
+        "y": 140,
+        "wires": [
+            [
+                "bcb47cf5e0332508"
+            ]
+        ]
+    },
+    {
+        "id": "345f101711e24d0c",
+        "type": "ui_button",
+        "z": "8e4ae4559f042f85",
+        "name": "",
+        "group": "cb180f9cdf865a0a",
+        "order": 1,
+        "width": 2,
+        "height": 1,
+        "passthru": false,
+        "label": "<-- Zurück",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "{\"group\":{\"hide\":[\"Kikeriki_Einstellungen\"], \"show\":[\"Kikeriki_Anlagendaten\"]}}",
+        "payloadType": "json",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 270,
+        "y": 180,
+        "wires": [
+            [
+                "bcb47cf5e0332508"
+            ]
+        ]
+    },
+    {
+        "id": "65b4ff70cf29872b",
+        "type": "ui_button",
+        "z": "8e4ae4559f042f85",
+        "name": "",
+        "group": "76ba114ce7b7c74f",
+        "order": 6,
+        "width": 2,
+        "height": 1,
+        "passthru": false,
+        "label": "Auto",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "{{msg.payload.backgroundcolor.auto}}",
+        "className": "",
+        "icon": "",
+        "payload": "Auto",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 250,
+        "y": 220,
+        "wires": [
+            [
+                "556f340171fd269b",
+                "6d286c7eaff95b18"
+            ]
+        ]
+    },
+    {
+        "id": "7f1a86c872333f9e",
+        "type": "ui_button",
+        "z": "8e4ae4559f042f85",
+        "name": "",
+        "group": "76ba114ce7b7c74f",
+        "order": 7,
+        "width": 2,
+        "height": 1,
+        "passthru": false,
+        "label": "Hand Auf",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "{{msg.payload.backgroundcolor.hand_auf}}",
+        "className": "",
+        "icon": "",
+        "payload": "Hand_Auf",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 260,
+        "y": 260,
+        "wires": [
+            [
+                "556f340171fd269b",
+                "6d286c7eaff95b18"
+            ]
+        ]
+    },
+    {
+        "id": "adf69d19a4948c65",
+        "type": "ui_button",
+        "z": "8e4ae4559f042f85",
+        "name": "",
+        "group": "76ba114ce7b7c74f",
+        "order": 8,
+        "width": 2,
+        "height": 1,
+        "passthru": false,
+        "label": "Hand Zu",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "{{msg.payload.backgroundcolor.hand_zu}}",
+        "className": "",
+        "icon": "",
+        "payload": "Hand_Zu",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 260,
+        "y": 300,
+        "wires": [
+            [
+                "556f340171fd269b",
+                "6d286c7eaff95b18"
+            ]
+        ]
+    },
+    {
+        "id": "556f340171fd269b",
+        "type": "function",
+        "z": "8e4ae4559f042f85",
+        "name": "Klappenbetrieb-Button Farben",
+        "func": "//Setzen der Buttonfarben von \"Auto\", \"Hand Auf\" und \"Hand Zu\"\nlet status = msg.payload;\nswitch (status) {\n  case \"Auto\":\n    return {\n        payload:{\n            \"backgroundcolor\":{\n                \"auto\": \"green\",\n                \"hand_auf\": \"grey\",  \n                \"hand_zu\": \"grey\",  \n            }\n        }\n    };\n  case \"Hand_Auf\":\n    return {\n        payload:{\n            \"backgroundcolor\":{\n                \"auto\": \"grey\",\n                \"hand_auf\": \"green\",  \n                \"hand_zu\": \"grey\",  \n            }\n        }\n    };\n  case \"Hand_Zu\":\n    return {\n        payload:{\n            \"backgroundcolor\":{\n                \"auto\": \"grey\",\n                \"hand_auf\": \"grey\",  \n                \"hand_zu\": \"green\",  \n            }\n        }\n    };\n  default:\n    return {\n        payload:{\n            \"backgroundcolor\":{\n                \"auto\": \"grey\",\n                \"hand_auf\": \"grey\",  \n                \"hand_zu\": \"grey\",  \n            }\n        }\n    };\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 300,
+        "wires": [
+            [
+                "8404027211b97055"
+            ]
+        ]
+    },
+    {
+        "id": "8404027211b97055",
+        "type": "link out",
+        "z": "8e4ae4559f042f85",
+        "name": "link out 4",
+        "mode": "link",
+        "links": [
+            "1dedb0bcc7c7d5bf"
+        ],
+        "x": 795,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "1dedb0bcc7c7d5bf",
+        "type": "link in",
+        "z": "8e4ae4559f042f85",
+        "name": "link in 6",
+        "links": [
+            "8404027211b97055"
+        ],
+        "x": 115,
+        "y": 220,
+        "wires": [
+            [
+                "65b4ff70cf29872b",
+                "7f1a86c872333f9e",
+                "adf69d19a4948c65"
+            ]
+        ]
+    },
+    {
+        "id": "71d30f2c04864b02",
+        "type": "function",
+        "z": "8e4ae4559f042f85",
+        "name": "Aktuelle Uhrzeit",
+        "func": "//Aktuelle Uhrzeit (Stunden und Minuten) als Integer schreiben, z.B. 19:35 Uhr --> 1935\n//Die Uhrzeit wird alle 5 Minuten, wenn die Einstellungen gespeichert werden oder die Anlage sich neu Verbindet, aktuallisiert\nconst zeit = new Date;\nlet stunde = zeit.getHours(); //Aktuelle Stunde holen\nlet minute = zeit.getMinutes(); //Aktuelle Minute holen\nlet uhrzeitInt = stunde * 100 + minute; //Uhrzeit als Integer Schreiben\n\nmsg.payload = uhrzeitInt;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 380,
+        "wires": [
+            [
+                "576b7b503b4b0b80"
+            ]
+        ]
+    },
+    {
+        "id": "576b7b503b4b0b80",
+        "type": "function",
+        "z": "8e4ae4559f042f85",
+        "name": "Aktuelle mit gespeicherter Uhrzeit vergleichen",
+        "func": "//Aktuelle Uhrzeit mit der eingestellten Uhrzeit vergleichen\n//Zurückgegebene Werte: true = Klappe soll auffahren    false = Klappe soll zufahren\nlet srise = flow.get(\"srise_int\");\nlet sset = flow.get(\"sset_int\");\nlet aktuelleUhrzeit = msg.payload;\nlet uhrzeit;\n\nif (aktuelleUhrzeit >= srise && aktuelleUhrzeit < sset) {\n    uhrzeit = true;\n} else {\n    uhrzeit = false;\n};\n\nreturn {\n    payload:{\n        \"uhrzeit\": uhrzeit\n    }\n};\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 960,
+        "y": 380,
+        "wires": [
+            [
+                "de329ac5189022c3"
+            ]
+        ]
+    },
+    {
+        "id": "763d2975bf95c9a2",
+        "type": "inject",
+        "z": "8e4ae4559f042f85",
+        "name": "Inject alle 5 Minuten",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "*/5 0-23 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 300,
+        "y": 380,
+        "wires": [
+            [
+                "71d30f2c04864b02"
+            ]
+        ]
+    },
+    {
+        "id": "0b9bb181bda2f0ad",
+        "type": "mqtt out",
+        "z": "8e4ae4559f042f85",
+        "name": "",
+        "topic": "Kikeriki/Node_Red/Klappenbetrieb",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "985a99e5bd2c81ae",
+        "x": 1320,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "40eabd11e2a37e8f",
+        "type": "function",
+        "z": "8e4ae4559f042f85",
+        "name": "Klappenbetrieb JSON-Format",
+        "func": "//Die Daten von klappenbetrieb ins JSON-Format bringen und Publishen\nlet klappenbetrieb = flow.get(\"klappenbetrieb\");\n\nreturn {\n    payload:{\n        \"klappenbetrieb\": klappenbetrieb\n    }\n};",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 910,
+        "y": 220,
+        "wires": [
+            [
+                "0b9bb181bda2f0ad"
+            ]
+        ]
+    },
+    {
+        "id": "d15601149231a7d8",
+        "type": "function",
+        "z": "8e4ae4559f042f85",
+        "name": "Uhrzeit Verarbeitung (JSON)",
+        "func": "//Die Sonnenaufgangs- und -untergangszeit ins JSON-Format bringen\nlet sriseInt = flow.get(\"srise_hour\") * 100 + flow.get(\"srise_minute\");\nlet ssetInt = flow.get(\"sset_hour\") * 100 + flow.get(\"sset_minute\");\nlet srise = (\"0\" + flow.get(\"srise_hour\")).slice(-2) + \":\" + (\"0\" + flow.get(\"srise_minute\")).slice(-2)\nlet sset = (\"0\" + flow.get(\"sset_hour\")).slice(-2) + \":\" + (\"0\" + flow.get(\"sset_minute\")).slice(-2)\n\nflow.set(\"srise_int\", sriseInt);\nflow.set(\"sset_int\", ssetInt);\n\nreturn {\n    payload:{\n        \"srise\": srise,\n        \"sset\":sset\n    }\n};",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 1160,
+        "wires": [
+            [
+                "17540d442b10eb2e",
+                "941f837e105be2c9"
+            ]
+        ]
+    },
+    {
+        "id": "de80f19e1168ebdc",
+        "type": "ui_switch",
+        "z": "8e4ae4559f042f85",
+        "name": "Auf alle Hühner warten",
+        "label": "Auf alle Hüner vor dem Schließen warten",
+        "tooltip": "",
+        "group": "cb180f9cdf865a0a",
+        "order": 3,
+        "width": 7,
+        "height": 1,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 300,
+        "y": 740,
+        "wires": [
+            [
+                "d2b913d3587330f6"
+            ]
+        ]
+    },
+    {
+        "id": "d2b913d3587330f6",
+        "type": "function",
+        "z": "8e4ae4559f042f85",
+        "name": "auf_hühner_warten",
+        "func": "//Den Parameter auf Hühner warten als globale Variable für die Weiterverwendung setzen\nflow.set(\"auf_hühner_warten\", msg.payload);\nreturn msg;\n          \n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 740,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a95748ee73845919",
+        "type": "ui_text",
+        "z": "8e4ae4559f042f85",
+        "group": "cb180f9cdf865a0a",
+        "order": 4,
+        "width": 2,
+        "height": 1,
+        "name": "Gespeichter Wert \"Auf Hühner Warten\"",
+        "label": "",
+        "format": "{{payload}}",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 1330,
+        "y": 1100,
+        "wires": []
+    },
+    {
+        "id": "5dd9c0fb37ae270c",
+        "type": "function",
+        "z": "8e4ae4559f042f85",
+        "name": "\"auf Hühner warten\" Umwandlung in Text",
+        "func": "//Aus dem JSON-Format den Wert von auf_huener_warten vergleichen und \"An\" oder \"Aus\" weitergeben\nlet aufHuehnerWarten = msg.payload[\"auf_huehner_warten\"];\n\nif (aufHuehnerWarten) {\n    msg.payload = \"An\";\n} else {\n    msg.payload = \"Aus\";\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 940,
+        "y": 1100,
+        "wires": [
+            [
+                "a95748ee73845919"
+            ]
+        ]
+    },
+    {
+        "id": "de329ac5189022c3",
+        "type": "mqtt out",
+        "z": "8e4ae4559f042f85",
+        "name": "",
+        "topic": "Kikeriki/Node_Red/Uhrzeit",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "985a99e5bd2c81ae",
+        "x": 1300,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "6e43a9c28339192e",
+        "type": "ui_button",
+        "z": "8e4ae4559f042f85",
+        "name": "",
+        "group": "cb180f9cdf865a0a",
+        "order": 6,
+        "width": 4,
+        "height": 1,
+        "passthru": false,
+        "label": "Nach Uhrzeit fahren",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "{{msg.payload.backgroundcolor.uhrzeit}}",
+        "className": "",
+        "icon": "",
+        "payload": "uhrzeit",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 300,
+        "y": 620,
+        "wires": [
+            [
+                "ed59cf2ede93d0c3",
+                "8bd6fe3edf0a30a7"
+            ]
+        ]
+    },
+    {
+        "id": "9addd78a414c5063",
+        "type": "ui_button",
+        "z": "8e4ae4559f042f85",
+        "name": "",
+        "group": "cb180f9cdf865a0a",
+        "order": 5,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Nach Lux fahren",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "{{msg.payload.backgroundcolor.lux}}",
+        "className": "",
+        "icon": "",
+        "payload": "lux",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 280,
+        "y": 580,
+        "wires": [
+            [
+                "ed59cf2ede93d0c3",
+                "8bd6fe3edf0a30a7"
+            ]
+        ]
+    },
+    {
+        "id": "8bd6fe3edf0a30a7",
+        "type": "function",
+        "z": "8e4ae4559f042f85",
+        "name": "fahren_nach",
+        "func": "//Den Parameter nach dem die Klappe im Automatikbetrieb gefahren wird als globale Variable für die Weiterverwendung setzen\nflow.set(\"fahren_nach\", msg.payload);\nreturn msg;\n          \n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 580,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ed59cf2ede93d0c3",
+        "type": "function",
+        "z": "8e4ae4559f042f85",
+        "name": "fahren_nach-Button Farben",
+        "func": "//Setzen der Buttonfarben von \"Nach Lux fahren\" und \"Nach Uhrzeit fahren\"\nlet fahrenNach = msg.payload;\nswitch (fahrenNach) {\n  case \"lux\":\n    return {\n        payload:{\n            \"backgroundcolor\":{\n                \"lux\": \"green\",\n                \"uhrzeit\": \"grey\"  \n            }\n        }\n    };\n  case \"uhrzeit\":\n    return {\n        payload:{\n            \"backgroundcolor\":{\n                \"lux\": \"grey\",\n                \"uhrzeit\": \"green\" \n            }\n        }\n    };\n  default:\n    return {\n        payload:{\n            \"backgroundcolor\":{\n                \"lux\": \"grey\",\n                \"uhrzeit\": \"grey\"  \n            }\n        }\n    };\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 620,
+        "wires": [
+            [
+                "1e2c652599630b93"
+            ]
+        ]
+    },
+    {
+        "id": "1e2c652599630b93",
+        "type": "link out",
+        "z": "8e4ae4559f042f85",
+        "name": "link out 5",
+        "mode": "link",
+        "links": [
+            "72f61224f3c7bd59"
+        ],
+        "x": 795,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "72f61224f3c7bd59",
+        "type": "link in",
+        "z": "8e4ae4559f042f85",
+        "name": "link in 7",
+        "links": [
+            "1e2c652599630b93"
+        ],
+        "x": 125,
+        "y": 600,
+        "wires": [
+            [
+                "9addd78a414c5063",
+                "6e43a9c28339192e"
+            ]
+        ]
+    },
+    {
+        "id": "c9df459afd0d340a",
+        "type": "ui_text",
+        "z": "8e4ae4559f042f85",
+        "group": "cb180f9cdf865a0a",
+        "order": 7,
+        "width": 2,
+        "height": 1,
+        "name": "Gespeicherter \"fahre_nach\" Wert",
+        "label": "",
+        "format": "{{payload.fahre_nach}}",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 920,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "bb31cb0a9a1aa808",
+        "type": "function",
+        "z": "8e4ae4559f042f85",
+        "name": "hühner_anzahl",
+        "func": "//Die Hühneranzahl als globale Variable für die Weiterverwendung setzen\nflow.set(\"hühner_anzahl\", msg.payload);\nreturn msg;\n          \n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 780,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c7b8397c5e733c84",
+        "type": "ui_numeric",
+        "z": "8e4ae4559f042f85",
+        "name": "Hühneranzahl",
+        "label": "Hühneranzahl",
+        "tooltip": "",
+        "group": "cb180f9cdf865a0a",
+        "order": 18,
+        "width": 6,
+        "height": 1,
+        "wrap": true,
+        "passthru": true,
+        "topic": "topic",
+        "topicType": "msg",
+        "format": "{{value}}",
+        "min": "0",
+        "max": "1000",
+        "step": 1,
+        "className": "",
+        "x": 280,
+        "y": 780,
+        "wires": [
+            [
+                "bb31cb0a9a1aa808"
+            ]
+        ]
+    },
+    {
+        "id": "b8b1f4551ad5bf8b",
+        "type": "ui_text",
+        "z": "8e4ae4559f042f85",
+        "group": "cb180f9cdf865a0a",
+        "order": 19,
+        "width": 3,
+        "height": 1,
+        "name": "Gespeicherte Hühner Anzahl",
+        "label": "",
+        "format": "{{payload[\"huehner_anzahl\"]}} Hühner",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 900,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "7b624d9b3e91ea55",
+        "type": "debug",
+        "z": "8e4ae4559f042f85",
+        "name": "debug 3",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 840,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "cb8b0c0ebe90bf41",
+        "type": "link in",
+        "z": "8e4ae4559f042f85",
+        "name": "link in 8",
+        "links": [
+            "f8f40581928df29c"
+        ],
+        "x": 385,
+        "y": 340,
+        "wires": [
+            [
+                "71d30f2c04864b02"
+            ]
+        ]
+    },
+    {
+        "id": "c6893ac4baf54fe1",
+        "type": "link in",
+        "z": "8e4ae4559f042f85",
+        "name": "link in 9",
+        "links": [
+            "f8f40581928df29c"
+        ],
+        "x": 445,
+        "y": 840,
+        "wires": [
+            [
+                "30371fb1a0e6d349"
+            ]
+        ]
+    },
+    {
+        "id": "6d286c7eaff95b18",
+        "type": "function",
+        "z": "8e4ae4559f042f85",
+        "name": "klappenbetrieb als globale Variable",
+        "func": "//Den Klappenbetrieb als globale Variable für die Weiterverwendung setzen\nflow.set(\"klappenbetrieb\", msg.payload);\nreturn msg;\n          \n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 220,
+        "wires": [
+            [
+                "40eabd11e2a37e8f"
+            ]
+        ]
+    },
+    {
+        "id": "19558c93d65292aa",
+        "type": "link in",
+        "z": "8e4ae4559f042f85",
+        "name": "link in 10",
+        "links": [
+            "f8f40581928df29c"
+        ],
+        "x": 745,
+        "y": 260,
+        "wires": [
+            [
+                "40eabd11e2a37e8f"
+            ]
+        ]
+    },
+    {
+        "id": "ce997f58c43cb059",
+        "type": "ui_numeric",
+        "z": "8e4ae4559f042f85",
+        "name": "Helligkeitszeit in Sekunden",
+        "label": "Helligkeitszeit in Sekunden",
+        "tooltip": "",
+        "group": "cb180f9cdf865a0a",
+        "order": 10,
+        "width": 7,
+        "height": 1,
+        "wrap": true,
+        "passthru": true,
+        "topic": "topic",
+        "topicType": "msg",
+        "format": "{{value}}",
+        "min": "0",
+        "max": "10000",
+        "step": 1,
+        "className": "",
+        "x": 320,
+        "y": 700,
+        "wires": [
+            [
+                "af12e10363c07ead"
+            ]
+        ]
+    },
+    {
+        "id": "af12e10363c07ead",
+        "type": "function",
+        "z": "8e4ae4559f042f85",
+        "name": "lux_zeit",
+        "func": "//Die Lux grenz Zeit als globale Variable für die Weiterverwendung setzen\nflow.set(\"lux_zeit\", msg.payload);\nreturn msg;\n          \n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "50e7c7da749d3d8b",
+        "type": "ui_text",
+        "z": "8e4ae4559f042f85",
+        "group": "cb180f9cdf865a0a",
+        "order": 11,
+        "width": 2,
+        "height": 1,
+        "name": "Gespeicherte Lux Zeit",
+        "label": "",
+        "format": "{{payload.lux_zeit}}Sek",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 880,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "314f28589bf50213",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Dashboard",
+        "info": "",
+        "x": 260,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "e8599b2a01e08d7c",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Beim erreichen und überschreiten von der Sunrise Stunde und Minute wird die Klappe im Automatiketrieb aufgefahren",
+        "info": "",
+        "x": 1040,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "2a0fb4a82f16a9b6",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Beim erreichen und überschreiten von der Sunset Stunde und Minute wird die Klappe im Automatiketrieb zugefahren",
+        "info": "",
+        "x": 1030,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "9d820ac43df9bc38",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Bestimmen ob die Klappe im Automatikbetrieb durch die Helligkeit oder Uhrzeit fahren soll",
+        "info": "",
+        "x": 950,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "72b5c93901c3d758",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Festlegen der Helligkeitsgrenze in Lux, bei der die Klappe auf- bzw zufahren soll",
+        "info": "",
+        "x": 920,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "7358de8d96a03f4d",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Festlegen der Zeit in Sekunden, die die Helligkeisgrenze über- oder unterschritten werden muss, bis die Klappe fährt",
+        "info": "",
+        "x": 1030,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "a79d0995033989b7",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Parameter der Klappe vor dem Schließen darauf warten lässt, ob alle Hühner sich im Stall befinden",
+        "info": "",
+        "x": 1020,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "079f482afc965416",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Gibt die Anzahl der gesamten Hühner vor",
+        "info": "",
+        "x": 840,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "0133c6fa6578146e",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Alle Einstellungen publishen",
+        "info": "",
+        "x": 1220,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "3a5e3cf555b697c7",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Anzeigen des gespeicherten Wertes von \"Hühneranzahl\"",
+        "info": "",
+        "x": 1310,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "991baa1c9b3fb888",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Anzeigen des gespeicherten Wertes von \"fahre_nach\"",
+        "info": "",
+        "x": 1300,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "20b8a22cf95a6f41",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Anzeigen des gespeicherten Wertes von \"Lux grenze\"",
+        "info": "",
+        "x": 1300,
+        "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "4de3f2b86c985703",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Anzeigen des gespeicherten Wertes von \"Lux Zeit\"",
+        "info": "",
+        "x": 1290,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "d5c68a1d2c9df742",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Anzeigen des gespeicherten Wertes von \"Sonnenaufgang\"",
+        "info": "",
+        "x": 1310,
+        "y": 1160,
+        "wires": []
+    },
+    {
+        "id": "116d9c4c40e02102",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Anzeigen des gespeicherten Wertes von \"Sonnenuntergang\"",
+        "info": "",
+        "x": 1320,
+        "y": 1200,
+        "wires": []
+    },
+    {
+        "id": "5537d3ca7d2c07b5",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Rückmeldung, dass der Speichervorgang der Einstellungen erfolgreich war",
+        "info": "",
+        "x": 960,
+        "y": 1260,
+        "wires": []
+    },
+    {
+        "id": "f9b28a02a4b7ee6d",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Speichern aller aktuellen Werte in Einstellungen",
+        "info": "",
+        "x": 220,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "614eeb65e6574d87",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Publishen, abhängig der Uhrzeit, ein True oder False",
+        "info": "",
+        "x": 1650,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "abae11cf115b7d7c",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Publishen des Klappenbetriebs: \"Auto\", \"Hand_Auf\" oder \"Hand_Zu\"",
+        "info": "",
+        "x": 1720,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "6199f03b2c73a13a",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Button-Farbe wechseln",
+        "info": "",
+        "x": 940,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "01c04e8cc6e0cca1",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Button-Farbe wechseln",
+        "info": "",
+        "x": 960,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "508844c309933509",
+        "type": "comment",
+        "z": "8e4ae4559f042f85",
+        "name": "Wechseln des Reiters von \"Anlagendaten\" zu \"Einstellungen\" und zurück",
+        "info": "",
+        "x": 920,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "985a99e5bd2c81ae",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "76ba114ce7b7c74f",
+        "type": "ui_group",
+        "name": "Anlagendaten",
+        "tab": "5608a52e19aa7a3a",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "f318ec90e48bb5f8",
+        "type": "MySQLdatabase",
+        "name": "Projekt_Kikeriki",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "projekt_kikeriki",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "cb180f9cdf865a0a",
+        "type": "ui_group",
+        "name": "Einstellungen",
+        "tab": "5608a52e19aa7a3a",
+        "order": 2,
+        "disp": true,
+        "width": 9,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "5608a52e19aa7a3a",
+        "type": "ui_tab",
+        "name": "Kikeriki",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
