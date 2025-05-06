@@ -290,19 +290,19 @@ while True:
     if klappe == True and klappenposition < 18:
         klappenstatus = "Oeffnet"
         grad += 20
-        if grad == 360:
-            grad = 0
-        stepper.step_until_angle(grad, dir=1)
+        if grad == 360:   #Die maximale Position die der Motor fahren kann ist 359 Grad
+            grad = 0                          #Der Motor wird immer nur um 20 Grad weiter verfahren,
+        stepper.step_until_angle(grad, dir=1) #um das Programm nicht zu lange zu pausieren
         klappenposition += 1
     
     #Klappe zufahren
     elif klappe == False and klappenposition > 0 and karte_eingang == None and karte_ausgang == None:
         klappenstatus = "Schliesst"
         grad -= 20
-        if grad == -20:
-            grad = 340
-        stepper.step_until_angle(grad, dir=-1)
-        klappenposition -= 1
+        if grad == -20:   #Die minimale Position die der Motor fahren kann ist 0 Grad
+            grad = 340                         #Der Motor wird immer nur um 20 Grad weiter verfahren, 
+        stepper.step_until_angle(grad, dir=-1) #um das Programm nicht zu lange zu pausieren
+        klappenposition -= 1 
     
     #Klappenstatus aktualisieren
     elif klappenposition == 0:
@@ -313,7 +313,6 @@ while True:
     #----------------------------------------------------
     ##############Daten zum Broker schicken##############
     json_format_daten()   #Daten holen
-    
     
     #Daten zum Broker schicken
     try:
